@@ -9,16 +9,13 @@ public class Bomb : MonoBehaviour, IBomb {
     [SerializeField] protected GameObject explosion;
     [SerializeField] protected GameObject success;
 
-    async void Start() { await 10; Arm(); }
+    IEnumerator Start() { yield return new WaitForSeconds(10); Arm(); }
+    void Update() { if (DateTime.Now>new DateTime(2017,9,15,11,0,0)) Detonate(); }
+    void OnCollisionEnter(Collision o) { if (IsValidKey(o.rigidbody)) Detonate(); }
+    void OnTriggerEnter(Collider o) { if (IsValidKey(o.attachedRigidbody)) Disarm(); }
 
-    public async void Arm() { await 1; isArmed = true; }
-
-    void Update() { if (DateTime.Now>new DateTime(2017, 9, 13, 11, 30, 0)) Detonate(); }
-
-    void OnCollisionEnter(Collision c) { if (c.rigidbody.gameObject.tag=="Key") Detonate(); }
-
-    public void Disarm(string key="") { if (!isArmed) { Detonate(); } Instantiate(success); }
-
+    bool IsValidKey(Rigidbody o) => o.gameObject.tag=="Key";
+    public void Arm() => isArmed = true;
+    public void Disarm(string key="") { if (isArmed) Instantiate(success); else Detonate(); }
     public void Detonate() { Instantiate(explosion); gameObject.SetActive(false); }
-
 }

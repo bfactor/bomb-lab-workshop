@@ -30,16 +30,16 @@ using VR = UnityEngine.VR;
 /// rendered as a TimeWarp overlay instead by drawing it into the eye buffer.
 /// This will take full advantage of the display resolution and avoid double
 /// resampling of the texture.
-/// 
+///
 /// If the texture is dynamically generated, as for an interactive GUI or
 /// animation, it must be explicitly triple buffered to avoid flickering
 /// when it is referenced asynchronously by TimeWarp, check OVRRTOverlayConnector.cs for triple buffers design
-/// 
+///
 /// We support 3 types of Overlay shapes right now
 ///		1. Quad : This is most common overlay type , you render a quad in Timewarp space.
 ///		2. Cylinder: [Mobile Only][Experimental], Display overlay as partial surface of a cylinder
 ///			* The cylinder's center will be your game object's center
-///			* We encoded the cylinder's parameters in transform.scale, 
+///			* We encoded the cylinder's parameters in transform.scale,
 ///				**[scale.z] is the radius of the cylinder
 ///				**[scale.y] is the height of the cylinder
 ///				**[scale.x] is the length of the arc of cylinder
@@ -51,7 +51,7 @@ using VR = UnityEngine.VR;
 ///		4. OffcenterCubemap: [Mobile Only] Display overlay as a cube map with a texture coordinate offset
 ///			* The actually sampling will looks like [color = texture(cubeLayerSampler, normalize(direction) + offset)] instead of [color = texture( cubeLayerSampler, direction )]
 ///			* The extra center offset can be feed from transform.position
-///			* Note: if transform.position's magnitude is greater than 1, which will cause some cube map pixel always invisible 
+///			* Note: if transform.position's magnitude is greater than 1, which will cause some cube map pixel always invisible
 ///					Which is usually not what people wanted, we don't kill the ability for developer to do so here, but will warn out.
 /// </summary>
 
@@ -60,11 +60,11 @@ public class OVROverlay : MonoBehaviour
 	public enum OverlayShape
 	{
 		Quad = OVRPlugin.OverlayShape.Quad,       // Display overlay as a quad
-		Cylinder = OVRPlugin.OverlayShape.Cylinder,   // [Mobile Only][Experimental] Display overlay as a cylinder, Translation only works correctly with vrDriver 1.04 or above 
+		Cylinder = OVRPlugin.OverlayShape.Cylinder,   // [Mobile Only][Experimental] Display overlay as a cylinder, Translation only works correctly with vrDriver 1.04 or above
 
 		Cubemap = OVRPlugin.OverlayShape.Cubemap,    // Display overlay as a cube map
 
-		OffcenterCubemap = OVRPlugin.OverlayShape.OffcenterCubemap,    // Display overlay as a cube map with a center offset 
+		OffcenterCubemap = OVRPlugin.OverlayShape.OffcenterCubemap,    // Display overlay as a cube map with a center offset
 
 	}
 
@@ -125,8 +125,8 @@ public class OVROverlay : MonoBehaviour
 	public bool isMultiviewEnabled = false;
 
 	/// <summary>
-	/// Use this function to set texture and texNativePtr when app is running 
-	/// GetNativeTexturePtr is a slow behavior, the value should be pre-cached 
+	/// Use this function to set texture and texNativePtr when app is running
+	/// GetNativeTexturePtr is a slow behavior, the value should be pre-cached
 	/// </summary>
 	public void OverrideOverlayTextureInfo(Texture srcTexture, IntPtr nativePtr, VR.VRNode node)
 	{
@@ -134,7 +134,7 @@ public class OVROverlay : MonoBehaviour
 
 		if (textures.Length <= index)
 			return;
-		
+
 		textures[index] = srcTexture;
 		cachedTextures[index] = srcTexture;
 		texNativePtrs[index] = nativePtr;
@@ -358,7 +358,7 @@ public class OVROverlay : MonoBehaviour
 				frameIndex = 0;
 				externalTextures = new Texture[texturesPerStage][];
 			}
-			
+
 			for (int eyeId = 0; eyeId < texturesPerStage; ++eyeId)
 			{
 				if (externalTextures[eyeId] == null)
@@ -374,17 +374,15 @@ public class OVROverlay : MonoBehaviour
 				bool needsCopy = isDynamic;
 
 				Texture et = externalTextures[eyeId][stage];
-				if (et == null)
-				{
+				if (et == null) {
 					bool isSrgb = (etFormat == OVRPlugin.EyeTextureFormat.B8G8R8A8_sRGB || etFormat == OVRPlugin.EyeTextureFormat.R8G8B8A8_sRGB);
 
 					if (currentOverlayShape != OverlayShape.Cubemap && currentOverlayShape != OverlayShape.OffcenterCubemap)
 						et = Texture2D.CreateExternalTexture(size.w, size.h, txFormat, mipLevels > 1, isSrgb, externalTex);
 #if UNITY_2017_1_OR_NEWER
-					else
-						et = Cubemap.CreateExternalTexture(size.w, size.h, txFormat, mipLevels > 1, isSrgb, externalTex);
+					else et = Cubemap.CreateExternalTexture(size.w, txFormat, mipLevels > 1, externalTex);
 #endif
-					
+
 					externalTextures[eyeId][stage] = et;
 					needsCopy = true;
 				}

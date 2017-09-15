@@ -3,7 +3,7 @@ guid: db89bd5c365557d449040c89c3965d56
 timeCreated: 1490163433
 licenseType: Free
 ModelImporter:
-  serializedVersion: 19
+  serializedVersion: 21
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
@@ -14,13 +14,15 @@ ModelImporter:
   materials:
     importMaterials: 1
     materialName: 1
-    materialSearch: 1
+    materialSearch: 2
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -31,6 +33,7 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
+    extraUserProperties: []
     clipAnimations: []
     isReadable: 1
   meshes:
@@ -38,7 +41,10 @@ ModelImporter:
     globalScale: 112
     meshCompression: 0
     addColliders: 0
+    importVisibility: 0
     importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -54,6 +60,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
+    normalCalculationMode: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
